@@ -1,0 +1,35 @@
+.git
+.gitignore
+.gitattributes
+.github
+
+# Local secrets / compose config (the DB dump is mounted at runtime instead).
+.env
+.env.*
+docker-compose*.yml
+Dockerfile
+.dockerignore
+
+# docker/ is copied by explicit COPY instructions and removed from the web root
+# at build time, so it must stay in the build context (do not ignore it).
+
+# Not needed by the running web app: the DB service mounts the dump directly.
+databasefiles/
+README.md
+*.md
+
+# Test tooling and host-side dev dependencies: never ship these in the image.
+vendor/
+tests/
+spec/
+kahlan-config.php
+codeception.yml
+composer.json
+composer.lock
+
+# Editor / OS clutter.
+.vscode
+.idea
+.DS_Store
+*.swp
+*.log

@@ -1,0 +1,48 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: food-order-web:local
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8080}:80"
+    environment:
+      # `db` is the service name and is reachable on the Compose network.
+      DB_HOST: db
+      DB_NAME: ${DB_NAME:-food_order}
+      DB_USER: ${DB_USER:-food_user}
+      DB_PASSWORD: ${DB_PASSWORD:-food_password}
+      # "/" keeps every link root-relative, so the app works on any host/port.
+      # Set a full URL (e.g. http://localhost:8080/) if absolute links are needed.
+      SITEURL: ${SITEURL:-/}
+    volumes:
+      # Seeded from the image on first run, then persists uploaded images.
+      - images_data:/var/www/html/images
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mariadb:10.11
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-dev_root_password}
+      # Creates the database that the dump (which has no CREATE DATABASE/USE)
+      # is then imported into on first startup.
+      MARIADB_DATABASE: ${DB_NAME:-food_order}
+      MARIADB_USER: ${DB_USER:-food_user}
+      MARIADB_PASSWORD: ${DB_PASSWORD:-food_password}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./databasefiles/food_order.sql:/docker-entrypoint-initdb.d/01-food_order.sql:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+volumes:
+  db_data:
+  images_data:

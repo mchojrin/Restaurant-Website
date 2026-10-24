@@ -1,0 +1,13 @@
+{
+    "require-dev": {
+        "codeception/codeception": "^5.3",
+        "codeception/module-phpbrowser": "*",
+        "codeception/module-asserts": "*",
+        "kahlan/kahlan": "^6.1"
+    },
+    "scripts": {
+        "test": "codecept run",
+        "test:acceptance": "codecept run Acceptance",
+        "test:unit": "kahlan"
+    }
+}

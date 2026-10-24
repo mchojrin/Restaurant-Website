@@ -1,0 +1,65 @@
+# ---------------------------------------------------------------------------
+# Secrets / local configuration
+# ---------------------------------------------------------------------------
+# Real environment file only; .env.example is the committable template.
+.env
+.env.*
+!.env.example
+
+# Plaintext admin credentials / project notes: never publish these.
+/databasefiles/01 LOGIN DETAILS & PROJECT INFO.txt
+
+# Composer credentials for private repositories.
+/auth.json
+
+# ---------------------------------------------------------------------------
+# Dependencies
+# ---------------------------------------------------------------------------
+# Host-side Composer dependencies (Codeception and friends); rebuilt via
+# `composer install`. composer.json/composer.lock stay tracked.
+/vendor/
+
+# Composer binary downloaded into the project root.
+/composer.phar
+
+# ---------------------------------------------------------------------------
+# Test / build artifacts
+# ---------------------------------------------------------------------------
+# Codeception run output, but keep the directory's own keep-file.
+/tests/_output/*
+!/tests/_output/.gitignore
+
+# Codeception-generated Tester action classes, but keep the keep-file.
+/tests/Support/_generated/*
+!/tests/Support/_generated/.gitignore
+
+# Kahlan run/cache artifacts (Kahlan runs from the host, no Docker required).
+/spec/_output/
+/.kahlan/
+
+# Tool caches.
+.phpunit.result.cache
+.phpunit.cache/
+.php-cs-fixer.cache
+
+# ---------------------------------------------------------------------------
+# Docker local overrides
+# ---------------------------------------------------------------------------
+# Machine-specific Compose overrides (ports, paths, credentials).
+docker-compose.override.yml
+
+# ---------------------------------------------------------------------------
+# Logs & temp files
+# ---------------------------------------------------------------------------
+*.log
+
+# ---------------------------------------------------------------------------
+# Editor / OS clutter
+# ---------------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
